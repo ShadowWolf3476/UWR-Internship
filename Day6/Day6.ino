@@ -1,4 +1,5 @@
-/*Dynamic Headlight System*/
+/* Dynamic Headlight System
+   Prototype that uses an LDR and ultrasonic sensor to control LED brightness. */
 
 #define TRIG_PIN 9
 #define ECHO_PIN 10
@@ -15,10 +16,10 @@ void setup() {
 
 void loop() {
 
-  // Read LDR
+  // Read ambient light from the LDR
   int ldrValue = analogRead(LDR_PIN);
 
-  // Measure distance
+  // Trigger the ultrasonic sensor and measure the echo pulse
   digitalWrite(TRIG_PIN, LOW);
   delayMicroseconds(2);
 
@@ -28,26 +29,27 @@ void loop() {
 
   long duration = pulseIn(ECHO_PIN, HIGH, 30000);
 
+  // Convert echo time to distance in centimeters
   float distance = duration * 0.0343 / 2;
 
   int brightness = 0;
 
-  // Only work when dark
+  // Only activate the LED when the surroundings are dark enough
   if (ldrValue > 300) {
 
-    // Near object = bright LED
-    // Far object = dim LED
+    // Map closer objects to higher brightness values
     brightness = map(distance, 5, 100, 5, 255);
 
-    // Keep brightness within valid range
+    // Keep the PWM value within a valid range
     brightness = constrain(brightness, 5, 255);
 
   } else {
-    brightness = 0; // Daytime
+    brightness = 0; // Turn off the LED in brighter conditions
   }
 
   analogWrite(LED_PIN, brightness);
 
+  // Print values for Serial Monitor debugging
   Serial.print("LDR: ");
   Serial.print(ldrValue);
 
