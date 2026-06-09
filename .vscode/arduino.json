@@ -1,6 +1,7 @@
 {
     "sketch": "Day6\\Day6.ino",
-    "output": "build",
+    "output": "./Day6/build",
     "configuration": "cpu=atmega328",
-    "board": "arduino:avr:nano"
+    "board": "arduino:avr:nano",
+    "port": "COM3"
 }
